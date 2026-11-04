@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Superior EHS — Leadership Foundation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f2efe9;color:#1e293b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:16px;padding:16px;min-height:100vh}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:3px solid #1e6b3c;padding-bottom:10px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-text{font-size:15px;font-weight:800;color:#1e6b3c;letter-spacing:0.5px}
+.day-badge{background:#1e6b3c;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
+.date-big{font-size:17px;font-weight:700;color:#1e293b}
+.tab-bar{display:flex;gap:6px;margin-bottom:16px}
+.tab{flex:1;padding:10px 4px;text-align:center;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;background:#fff;border:2px solid #e2e2dc;border-radius:10px;color:#64748b;cursor:pointer}
+.tab.active{background:#1e6b3c;border-color:#1e6b3c;color:#fff;box-shadow:0 2px 8px rgba(30,107,60,0.25)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.card{background:#fff;border:1px solid #e2e2dc;border-radius:12px;padding:14px 16px;margin-bottom:14px;box-shadow:0 1px 4px rgba(30,41,59,0.06)}
+.card h2{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#1e6b3c;margin-bottom:10px;font-weight:800}
+.hero{background:#1e6b3c;color:#fff;border:none}
+.hero h2{color:rgba(255,255,255,0.85)}
+.hero .big{font-size:22px;font-weight:800;line-height:1.25}
+.hero .sub{font-size:13px;opacity:0.85;margin-top:4px}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700}
+.chip.green{background:#d1fae5;color:#166534}
+.chip.yellow{background:#fef3c7;color:#92400e}
+.chip.red{background:#fee2e2;color:#991b1b}
+.chip.blue{background:#dbeafe;color:#1e40af}
+.chip.slate{background:#e2e8f0;color:#334155}
+.prio-row{display:flex;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:14px;line-height:1.35;gap:10px}
+.prio-row:last-child{border-bottom:none}
+.prio-chk{width:22px;height:22px;border:2px solid #1e6b3c;border-radius:6px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:#1e6b3c;background:transparent}
+.prio-chk.checked{background:#1e6b3c;color:#fff}
+.prio-chk.checked:after{content:"\2713";font-weight:bold}
+.prio-text{flex:1}
+.prio-text.done{text-decoration:line-through;opacity:0.45}
+.at-risk{background:#fee2e2;color:#991b1b;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;letter-spacing:0.5px;align-self:center}
+.on-track{background:#d1fae5;color:#166534;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;letter-spacing:0.5px;align-self:center}
+.roadmap{position:relative;margin-left:8px;padding-left:18px;border-left:3px solid #e2e2dc}
+.phase{position:relative;padding:10px 0}
+.phase:before{content:"";position:absolute;left:-26px;top:14px;width:12px;height:12px;border-radius:50%;background:#e2e2dc;border:2px solid #1e6b3c}
+.phase.now:before{background:#1e6b3c}
+.phase h3{font-size:13px;font-weight:800;color:#1e6b3c}
+.phase p{font-size:13px;color:#475569;margin-top:2px}
+.phase .when{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px}
+.quote{background:#fff;border-left:4px solid #f59e0b;border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:14px}
+.quote .q{font-size:15px;font-style:italic;color:#334155;line-height:1.4}
+.quote .a{font-size:11px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{background:#fff;border:1px solid #e2e2dc;border-radius:12px;padding:12px 14px;text-align:center}
+.metric .num{font-size:26px;font-weight:800;color:#1e6b3c}
+.metric .num.warn{color:#b45309}
+.metric .num.bad{color:#991b1b}
+.metric .lbl{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.brief{background:#1e293b;color:#e2e8f0;border:none}
+.brief h2{color:#6ee7b7}
+.brief .row{margin-bottom:10px;font-size:14px;line-height:1.4}
+.brief .k{color:#6ee7b7;font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:1px;display:block}
+.footer{text-align:center;color:#94a3b8;font-size:11px;padding:12px 0}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="brand">
+    <div>
+      <div class="brand-text">SUPERIOR EHS</div>
+      <div class="date-big" id="dateBig"></div>
+    </div>
+  </div>
+  <div class="day-badge" id="dayBadge">DAY 7</div>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" onclick="show('justin')">My Day</div>
+  <div class="tab" onclick="show('greg')">Greg</div>
+  <div class="tab" onclick="show('board')">Board</div>
+</div>
+
+<!-- ================= MY DAY ================= -->
+<div class="tab-content active" id="justin">
+  <div class="card hero">
+    <h2>Today's Focus</h2>
+    <div class="big" id="heroFocus">Loading…</div>
+    <div class="sub" id="heroSub"></div>
+  </div>
+
+  <div class="card">
+    <h2>Daily Priorities</h2>
+    <div id="prioList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Corrective Actions</h2>
+    <div id="caList"></div>
+  </div>
+
+  <div class="quote">
+    <div class="q" id="quoteText"></div>
+    <div class="a">Pause &amp; Think</div>
+  </div>
+</div>
+
+<!-- ================= GREG ================= -->
+<div class="tab-content" id="greg">
+  <div class="card brief">
+    <h2>45-Second Brief</h2>
+    <div class="row"><span class="k">Today's Focus</span><span id="gregFocus"></span></div>
+    <div class="row"><span class="k">Question for Greg</span><span id="gregQ"></span></div>
+    <div class="row"><span class="k">Observation / Win</span><span id="gregObs"></span></div>
+  </div>
+  <div class="card">
+    <h2>Initiative Status</h2>
+    <div id="initList"></div>
+  </div>
+</div>
+
+<!-- ================= BOARD ================= -->
+<div class="tab-content" id="board">
+  <div class="metric-grid">
+    <div class="metric"><div class="num" id="mTrir">—</div><div class="lbl">TRIR vs 3.3 benchmark</div></div>
+    <div class="metric"><div class="num" id="mRec">4</div><div class="lbl">Recordables YTD</div></div>
+    <div class="metric"><div class="num warn" id="mHand">40%</div><div class="lbl">Hand / Finger share</div></div>
+    <div class="metric"><div class="num warn" id="mTemp">48%</div><div class="lbl">Incidents &lt; 3mo tenure</div></div>
+  </div>
+  <div class="card">
+    <h2>60-Day Roadmap</h2>
+    <div class="roadmap" id="roadmap"></div>
+  </div>
+  <div class="card">
+    <h2>Board Story</h2>
+    <div style="font-size:13px;color:#475569;line-height:1.5" id="boardStory"></div>
+  </div>
+</div>
+
+<div class="footer">Superior Huntingdon Composites — Vanceburg KY · built by Justin Bartram</div>
+
+<script>
+/* ============ DATA LAYER — edit here only ============ */
+const DATA = {
+  startDate: "2026-10-27",
+  focus: "Close out the furnace RCF exposure story — air sampling scheduled, PWI draft final.",
+  focusSub: "One hazard narrative, owned end to end. That's the leadership proof.",
+  priorities: [
+    {t:"Finish Building Furnace PWI draft — final edit", done:false},
+    {t:"Prep air sampling request (RCF furnace build)", done:false},
+    {t:"Corrective action tracker — review due dates", done:false},
+    {t:"Walk F-team oven line — check vest compliance", done:false}
+  ],
+  correctiveActions: [
+    {t:"KSS new-hire PPE issue — verify agency supplies", due:"2026-11-04", status:"open"},
+    {t:"F-team oven heat shield inspection", due:"2026-11-08", status:"open"},
+    {t:"Confined space binder refresh", due:"2026-11-15", status:"open"}
+  ],
+  quote: "Before you act, ask: am I doing this properly? The pause is the safety.",
+  greg: {
+    focus: "Furnace RCF exposure — sampling planned, PWI near final.",
+    question: "Approve air sampling spend for the furnace build operation?",
+    observation: "DJ coaching a new hire on mat rigging — the culture is starting to coach itself."
+  },
+  initiatives: [
+    {t:"New-hire orientation checklist", s:"done"},
+    {t:"Vest-until-verified program", s:"on"},
+    {t:"Corrective action tracker", s:"on"},
+    {t:"KSS partnership (Logan Wright)", s:"on"},
+    {t:"60-day roadmap", s:"on"},
+    {t:"Board dashboard", s:"done"}
+  ],
+  trir: null,
+  roadmap: [
+    {when:"Wk 1-2", title:"Observe & Learn", desc:"Floor time, watch trainers with JSAs, take over incident reporting, review all 2026 incidents.", now:true},
+    {when:"Wk 2-4", title:"Start Teaching", desc:"Learn to teach orientation, engage employees in training."},
+    {when:"Month 2", title:"JSA Audit & Rewrite", desc:"Team meetings around JSAs. Present observations + recommendations to leadership."},
+    {when:"Ongoing", title:"Train-the-Trainer", desc:"Confined Space, LOTO, Emergency Response, CPR, OSHA-10. HazCom program. Glove program."}
+  ],
+  boardStory: "Two distinct problems, one each: TEMP workers (KSS/Express) generate 100% of incidents in their first 3 months; DIRECT employees generate none there. Hand/finger is 40% of all incidents. The furnace area owns 3 of 4 recordables. The plan: fix onboarding with the agencies, attack hand safety with gloves + JSAs, and engineer the furnace exposure story. Presented as two clean problems — not 25 scattered ones."
+};
+
+/* ============ ENGINE — no need to touch below ============ */
+function dayCount(){
+  const start = new Date(DATA.startDate + "T00:00:00");
+  const now = new Date();
+  return Math.max(1, Math.floor((now - start)/86400000) + 1);
+}
+function fmtDate(d){ const x=new Date(d+"T00:00:00"); return x.toLocaleDateString("en-US",{month:"short",day:"numeric"}); }
+function daysUntil(d){ const x=new Date(d+"T00:00:00"); const n=new Date(); return Math.ceil((x-n)/86400000); }
+
+function show(id){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"));
+  document.querySelector(`.tab[onclick="show('${id}')"]`).classList.add("active");
+  document.getElementById(id).classList.add("active");
+}
+
+function render(){
+  const day = dayCount();
+  document.getElementById("dayBadge").textContent = "DAY " + day;
+  document.getElementById("dateBig").textContent = new Date().toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+
+  document.getElementById("heroFocus").textContent = DATA.focus;
+  document.getElementById("heroSub").textContent = DATA.focusSub;
+
+  document.getElementById("prioList").innerHTML = DATA.priorities.map((p,i)=>
+    `<div class="prio-row"><div class="prio-chk${p.done?' checked':''}" onclick="togglePrio(${i})"></div><div class="prio-text${p.done?' done':''}">${p.t}</div></div>`).join("");
+
+  document.getElementById("caList").innerHTML = DATA.correctiveActions.map(ca=>{
+    const d = daysUntil(ca.due);
+    const badge = ca.status==="done" ? '<span class="on-track">DONE</span>' : d<0 ? `<span class="at-risk">AT RISK · ${-d}d overdue</span>` : d<=3 ? `<span class="at-risk">DUE ${fmtDate(ca.due)}</span>` : `<span class="on-track">DUE ${fmtDate(ca.due)}</span>`;
+    return `<div class="prio-row"><div class="prio-text">${ca.t}</div>${badge}</div>`;
+  }).join("");
+
+  document.getElementById("quoteText").textContent = '"' + DATA.quote + '"';
+
+  document.getElementById("gregFocus").textContent = DATA.greg.focus;
+  document.getElementById("gregQ").textContent = DATA.greg.question;
+  document.getElementById("gregObs").textContent = DATA.greg.observation;
+
+  document.getElementById("initList").innerHTML = DATA.initiatives.map(i=>
+    `<div class="prio-row"><div class="prio-text">${i.t}</div>${i.s==="done"?'<span class="on-track">DONE</span>':'<span class="chip blue" style="font-size:10px">ACTIVE</span>'}</div>`).join("");
+
+  const trir = DATA.trir;
+  const mTrir = document.getElementById("mTrir");
+  if(trir==null){ mTrir.textContent="—"; mTrir.classList.add("warn"); }
+  else { mTrir.textContent = trir.toFixed(2); if(trir>3.3) mTrir.classList.add("bad"); }
+
+  document.getElementById("roadmap").innerHTML = DATA.roadmap.map(p=>
+    `<div class="phase${p.now?' now':''}"><div class="when">${p.when}</div><h3>${p.title}</h3><p>${p.desc}</p></div>`).join("");
+
+  document.getElementById("boardStory").textContent = DATA.boardStory;
+}
+function togglePrio(i){ DATA.priorities[i].done = !DATA.priorities[i].done; render(); }
+render();
+</script>
+</body>
+</html>
