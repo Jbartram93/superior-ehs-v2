@@ -90,6 +90,11 @@ body{background:#f2efe9;color:#1e293b;font-family:-apple-system,BlinkMacSystemFo
   </div>
 
   <div class="card">
+    <h2>Up Next — Calendar</h2>
+    <div id="calList"></div>
+  </div>
+
+  <div class="card">
     <h2>Daily Priorities</h2>
     <div id="prioList"></div>
   </div>
@@ -156,6 +161,12 @@ const DATA = {
     {t:"F-team oven heat shield inspection", due:"2026-11-08", status:"open"},
     {t:"Confined space binder refresh", due:"2026-11-15", status:"open"}
   ],
+  calendar: [
+    {d:"2026-11-03", time:"10:00 AM", t:"KSS partnership call — Logan Wright", tag:"Teams"},
+    {d:"2026-11-03", time:"2:00 PM", t:"Furnace area walk — F team oven", tag:"Floor"},
+    {d:"2026-11-04", time:"7:15 AM", t:"Greg daily check-in", tag:"Daily"},
+    {d:"2026-11-06", time:"9:00 AM", t:"New-hire orientation — teach", tag:"Training"}
+  ],
   quote: "Before you act, ask: am I doing this properly? The pause is the safety.",
   greg: {
     focus: "Furnace RCF exposure — sampling planned, PWI near final.",
@@ -212,6 +223,18 @@ function render(){
     const badge = ca.status==="done" ? '<span class="on-track">DONE</span>' : d<0 ? `<span class="at-risk">AT RISK · ${-d}d overdue</span>` : d<=3 ? `<span class="at-risk">DUE ${fmtDate(ca.due)}</span>` : `<span class="on-track">DUE ${fmtDate(ca.due)}</span>`;
     return `<div class="prio-row"><div class="prio-text">${ca.t}</div>${badge}</div>`;
   }).join("");
+
+  // Calendar: next events, soonest first, today highlighted, past hidden
+  const today = new Date().toISOString().slice(0,10);
+  const upcoming = DATA.calendar
+    .filter(ev => ev.d >= today)
+    .sort((a,b) => (a.d + a.time) < (b.d + b.time) ? -1 : 1)
+    .slice(0, 5);
+  document.getElementById("calList").innerHTML = upcoming.length ? upcoming.map(ev=>{
+    const when = ev.d === today ? "TODAY" : fmtDate(ev.d);
+    const chip = ev.d === today ? '<span class="at-risk" style="background:#dcfce7;color:#166534">TODAY</span>' : `<span class="chip slate" style="font-size:10px">${when}</span>`;
+    return `<div class="prio-row"><div class="prio-text"><span class="wtime" style="color:#1e6b3c">${ev.time}</span>${ev.t}</div>${chip}</div>`;
+  }).join("") : '<div class="prio-text" style="color:#94a3b8;font-size:13px">No upcoming meetings in the calendar.</div>';
 
   document.getElementById("quoteText").textContent = '"' + DATA.quote + '"';
 
