@@ -224,17 +224,30 @@ function render(){
     return `<div class="prio-row"><div class="prio-text">${ca.t}</div>${badge}</div>`;
   }).join("");
 
-  // Calendar: next events, soonest first, today highlighted, past hidden
-  const today = new Date().toISOString().slice(0,10);
-  const upcoming = DATA.calendar
-    .filter(ev => ev.d >= today)
+  // Calendar: all events, soonest first, past events shown struck-through
+  const now = new Date();
+  const today = now.toISOString().slice(0,10);
+  const nowHM = now.getHours().toString().padStart(2,"0") + ":" + now.getMinutes().toString().padStart(2,"0");
+  const visible = DATA.calendar
+    .filter(ev => ev.d >= today || (ev.d === today && ev.time >= nowHM))
     .sort((a,b) => (a.d + a.time) < (b.d + b.time) ? -1 : 1)
-    .slice(0, 5);
-  document.getElementById("calList").innerHTML = upcoming.length ? upcoming.map(ev=>{
+    .slice(0, 6);
+  const passed = DATA.calendar
+    .filter(ev => ev.d < today || (ev.d === today && ev.time < nowHM))
+    .sort((a,b) => (a.d + a.time) < (b.d + b.time) ? -1 : 1)
+    .slice(-3);
+  function calRow(ev, past){
     const when = ev.d === today ? "TODAY" : fmtDate(ev.d);
-    const chip = ev.d === today ? '<span class="at-risk" style="background:#dcfce7;color:#166534">TODAY</span>' : `<span class="chip slate" style="font-size:10px">${when}</span>`;
-    return `<div class="prio-row"><div class="prio-text"><span class="wtime" style="color:#1e6b3c">${ev.time}</span>${ev.t}</div>${chip}</div>`;
-  }).join("") : '<div class="prio-text" style="color:#94a3b8;font-size:13px">No upcoming meetings in the calendar.</div>';
+    const chip = past
+      ? '<span class="chip slate" style="font-size:10px;opacity:0.6">DONE</span>'
+      : ev.d === today
+        ? '<span class="chip" style="font-size:10px;background:#dcfce7;color:#166534">TODAY</span>'
+        : `<span class="chip slate" style="font-size:10px">${when}</span>`;
+    return `<div class="prio-row" style="${past?'opacity:0.45':''}"><div class="prio-text"${past?' style="text-decoration:line-through"':''}><span class="wtime" style="color:#1e6b3c">${ev.time}</span>${ev.t}</div>${chip}</div>`;
+  }
+  document.getElementById("calList").innerHTML =
+    visible.map(ev => calRow(ev, false)).join("") +
+    (passed.length ? '<div style="border-top:1px solid #f1f5f9;margin:6px 0"></div>' + passed.map(ev => calRow(ev, true)).join("") : "");
 
   document.getElementById("quoteText").textContent = '"' + DATA.quote + '"';
 
