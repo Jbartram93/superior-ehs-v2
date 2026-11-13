@@ -146,7 +146,7 @@ body{background:#f2efe9;color:#1e293b;font-family:-apple-system,BlinkMacSystemFo
 
 <script>
 /* ============ AUTO-REFRESH: always reflect the latest push ============ */
-const BUILD_STAMP = "__BUILD_STAMP__";
+const BUILD_STAMP = "2026-11-13 20:26 UTC";
 
 // Hard refresh every 2 minutes (safety net)
 setTimeout(() => location.reload(), 120000);
@@ -178,14 +178,10 @@ setTimeout(() => location.reload(), 120000);
 /* ============ DATA LAYER — edit here only ============ */
 const DATA = {
   startDate: "2026-10-27",
+  prioritiesDate: "2026-11-13",  // date the current priorities are for
   focus: "Close out the furnace RCF exposure story — air sampling scheduled, PWI draft final.",
   focusSub: "One hazard narrative, owned end to end. That's the leadership proof.",
-  priorities: [
-    {t:"Finish Building Furnace PWI draft — final edit", done:false},
-    {t:"Prep air sampling request (RCF furnace build)", done:false},
-    {t:"Corrective action tracker — review due dates", done:false},
-    {t:"Walk F-team oven line — check vest compliance", done:false}
-  ],
+  priorities: [],  // fresh each day — Hermes sets these with prioritiesDate
   correctiveActions: [
     {t:"KSS new-hire PPE issue — verify agency supplies", due:"2026-11-04", status:"open"},
     {t:"F-team oven heat shield inspection", due:"2026-11-08", status:"open"},
@@ -245,8 +241,16 @@ function render(){
   document.getElementById("heroFocus").textContent = DATA.focus;
   document.getElementById("heroSub").textContent = DATA.focusSub;
 
-  document.getElementById("prioList").innerHTML = DATA.priorities.map((p,i)=>
-    `<div class="prio-row"><div class="prio-chk${p.done?' checked':''}" onclick="togglePrio(${i})"></div><div class="prio-text${p.done?' done':''}">${p.t}</div></div>`).join("");
+  document.getElementById("prioList").innerHTML = (() => {
+    // Priorities: only show if dated for TODAY. Old lists = "nothing scheduled".
+    const todayStr = new Date().toISOString().slice(0,10);
+    const none = '<div class="prio-text" style="color:#94a3b8;font-size:13px;padding:8px 0">Nothing scheduled — tell Hermione today&#39;s priorities.</div>';
+    if (DATA.prioritiesDate === todayStr && DATA.priorities.length) {
+      return DATA.priorities.map((p,i)=>
+        `<div class="prio-row"><div class="prio-chk${p.done?' checked':''}" onclick="togglePrio(${i})"></div><div class="prio-text${p.done?' done':''}">${p.t}</div></div>`).join("");
+    }
+    return none;
+  })();
 
   document.getElementById("caList").innerHTML = DATA.correctiveActions.map(ca=>{
     const d = daysUntil(ca.due);
