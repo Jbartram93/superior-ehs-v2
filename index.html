@@ -142,9 +142,39 @@ body{background:#f2efe9;color:#1e293b;font-family:-apple-system,BlinkMacSystemFo
   </div>
 </div>
 
-<div class="footer">Superior Huntingdon Composites — Vanceburg KY · built by Justin Bartram</div>
+<div class="footer" id="footer">Superior Huntingdon Composites — Vanceburg KY · built by Justin Bartram</div>
 
 <script>
+/* ============ AUTO-REFRESH: always reflect the latest push ============ */
+const BUILD_STAMP = "2026-11-13 20:16 UTC";
+
+// Hard refresh every 2 minutes (safety net)
+setTimeout(() => location.reload(), 120000);
+
+// Smart refresh: poll for newer commit, reload instantly when found
+(async function pollForUpdates(){
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  while (true) {
+    await sleep(120000); // every 2 min
+    try {
+      const res = await fetch("https://api.github.com/repos/Jbartram93/superior-ehs-v2/commits/main", {cache: "no-store"});
+      const data = await res.json();
+      const sha = data.sha;
+      if (sha && window.__LAST_SHA__ && sha !== window.__LAST_SHA__) {
+        location.reload();
+      } else if (sha) {
+        window.__LAST_SHA__ = sha;
+      }
+    } catch(e) { /* offline — keep showing current data */ }
+  }
+})();
+
+// Footer stamp: shows the page build time so freshness is visible
+(function(){
+  const el = document.getElementById("footer");
+  if (el && BUILD_STAMP !== "2026-11-13 20:16 UTC") el.textContent += " · deployed " + BUILD_STAMP;
+})();
+
 /* ============ DATA LAYER — edit here only ============ */
 const DATA = {
   startDate: "2026-10-27",
