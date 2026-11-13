@@ -146,7 +146,7 @@ body{background:#f2efe9;color:#1e293b;font-family:-apple-system,BlinkMacSystemFo
 
 <script>
 /* ============ AUTO-REFRESH: always reflect the latest push ============ */
-const BUILD_STAMP = "2026-11-13 20:16 UTC";
+const BUILD_STAMP = "__BUILD_STAMP__";
 
 // Hard refresh every 2 minutes (safety net)
 setTimeout(() => location.reload(), 120000);
@@ -172,7 +172,7 @@ setTimeout(() => location.reload(), 120000);
 // Footer stamp: shows the page build time so freshness is visible
 (function(){
   const el = document.getElementById("footer");
-  if (el && BUILD_STAMP !== "2026-11-13 20:16 UTC") el.textContent += " · deployed " + BUILD_STAMP;
+  if (el && BUILD_STAMP !== "__BUILD_STAMP__") el.textContent += " · deployed " + BUILD_STAMP;
 })();
 
 /* ============ DATA LAYER — edit here only ============ */
