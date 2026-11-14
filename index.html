@@ -146,7 +146,7 @@ body{background:#f2efe9;color:#1e293b;font-family:-apple-system,BlinkMacSystemFo
 
 <script>
 /* ============ AUTO-REFRESH: always reflect the latest push ============ */
-const BUILD_STAMP = "2026-11-13 20:26 UTC";
+const BUILD_STAMP = "2026-11-14 15:32 EST";
 
 // Hard refresh every 2 minutes (safety net)
 setTimeout(() => location.reload(), 120000);
@@ -178,9 +178,9 @@ setTimeout(() => location.reload(), 120000);
 /* ============ DATA LAYER — edit here only ============ */
 const DATA = {
   startDate: "2026-10-27",
-  prioritiesDate: "2026-11-13",  // date the current priorities are for
-  focus: "Close out the furnace RCF exposure story — air sampling scheduled, PWI draft final.",
-  focusSub: "One hazard narrative, owned end to end. That's the leadership proof.",
+  prioritiesDate: "2026-11-14",  // date the current priorities are for
+  focus: "",  // blank on non-work days — Hermes sets each morning
+  focusSub: "",
   priorities: [],  // fresh each day — Hermes sets these with prioritiesDate
   correctiveActions: [
     {t:"KSS new-hire PPE issue — verify agency supplies", due:"2026-11-04", status:"open"},
@@ -258,18 +258,17 @@ function render(){
     return `<div class="prio-row"><div class="prio-text">${ca.t}</div>${badge}</div>`;
   }).join("");
 
-  // Calendar: all events, soonest first, past events shown struck-through
+  // Calendar: today's remaining + future events; today's PAST events struck through; older days hidden entirely
   const now = new Date();
   const today = now.toISOString().slice(0,10);
   const nowHM = now.getHours().toString().padStart(2,"0") + ":" + now.getMinutes().toString().padStart(2,"0");
   const visible = DATA.calendar
-    .filter(ev => ev.d >= today || (ev.d === today && ev.time >= nowHM))
+    .filter(ev => ev.d > today || (ev.d === today && ev.time >= nowHM))
     .sort((a,b) => (a.d + a.time) < (b.d + b.time) ? -1 : 1)
     .slice(0, 6);
-  const passed = DATA.calendar
-    .filter(ev => ev.d < today || (ev.d === today && ev.time < nowHM))
-    .sort((a,b) => (a.d + a.time) < (b.d + b.time) ? -1 : 1)
-    .slice(-3);
+  const passedToday = DATA.calendar
+    .filter(ev => ev.d === today && ev.time < nowHM)
+    .sort((a,b) => (a.d + a.time) < (b.d + b.time) ? -1 : 1);
   function calRow(ev, past){
     const when = ev.d === today ? "TODAY" : fmtDate(ev.d);
     const chip = past
@@ -281,7 +280,7 @@ function render(){
   }
   document.getElementById("calList").innerHTML =
     visible.map(ev => calRow(ev, false)).join("") +
-    (passed.length ? '<div style="border-top:1px solid #f1f5f9;margin:6px 0"></div>' + passed.map(ev => calRow(ev, true)).join("") : "");
+    (passedToday.length ? '<div style="border-top:1px solid #f1f5f9;margin:6px 0"></div>' + passedToday.map(ev => calRow(ev, true)).join("") : "");
 
   document.getElementById("quoteText").textContent = '"' + DATA.quote + '"';
 
